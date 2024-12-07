@@ -1,0 +1,4 @@
+opencv-python-headless
+tensorflow
+tensorflow-hub
+numpy
