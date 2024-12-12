@@ -1,3 +1,8 @@
+class ActivityConfidence:
+    HIGH = 0.8
+    MEDIUM = 0.6
+    LOW = 0.4
+
 def recognize_activity(keypoints):
     NOSE = 0
     LEFT_WRIST = 9
@@ -23,25 +28,22 @@ def recognize_activity(keypoints):
     right_ankle = keypoints[RIGHT_ANKLE]
 
     min_confidence = 0.3
+    activity_confidence = 0.0
 
-    if (nose[2] > min_confidence and 
-        left_hip[2] > min_confidence and 
-        right_hip[2] > min_confidence and 
-        left_knee[2] > min_confidence and 
-        right_knee[2] > min_confidence):
-
-
+    if all(keypoint[2] > min_confidence for keypoint in [nose, left_hip, right_hip, left_knee, right_knee]):
         hip_height = (left_hip[1] + right_hip[1]) / 2
         knee_height = (left_knee[1] + right_knee[1]) / 2
-
+        height_diff = abs(hip_height - knee_height)
 
         if hip_height < knee_height:
-            return "Standing"
-        
+            activity_confidence = min(1.0, height_diff * 2)
+            if activity_confidence > ActivityConfidence.MEDIUM:
+                return "Standing"
 
         if hip_height > knee_height:
-            return "Sitting"
-        
+            activity_confidence = min(1.0, height_diff * 2)
+            if activity_confidence > ActivityConfidence.MEDIUM:
+                return "Sitting"
 
         if (left_wrist[2] > min_confidence and 
             right_wrist[2] > min_confidence and 
