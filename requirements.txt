@@ -1,4 +1,15 @@
+flask
+flask-socketio
 opencv-python-headless
 tensorflow
 tensorflow-hub
 numpy
+pyyaml
+waitress
+eventlet
+
+pytest
+pytest-cov
+black
+flake8
+mypy
